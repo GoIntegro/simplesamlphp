@@ -22,7 +22,9 @@ class sspmod_go5auth_Auth_Source_LoggedUser extends SimpleSAML_Auth_Source
         if (!array_key_exists('access_token', $_REQUEST)
             && !array_key_exists('HTTP_AUTHORIZATION', $_SERVER)
         ) {
-            throw new SimpleSAML_Error_Exception('go5auth | error: access_token is required');
+            header('HTTP/1.1 401 Unauthorized');
+            echo 'go5auth | error: access_token is required';
+            exit;
         }
 
         $accessToken = isset($_REQUEST['access_token'])
