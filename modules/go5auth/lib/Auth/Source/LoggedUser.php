@@ -40,14 +40,27 @@ class sspmod_go5auth_Auth_Source_LoggedUser extends SimpleSAML_Auth_Source
             exit;
         }
 
-        $userAttributes = [
-            'email' => $userInfo->data->attributes->email,
-            'employee-id' => $userInfo->data->attributes->{'employee-id'},
-            'document' => $userInfo->data->attributes->{'document'},
-            'document-type' => $userInfo->data->attributes->{'document-type'},
-            'name' => $userInfo->data->attributes->{'name'},
-            'last-name' => $userInfo->data->attributes->{'last-name'},
-        ];
+        $userAttributes = [];
+        $userInfoAttribues = $userInfo->data->attributes;
+        $customAttributes = $state['SPMetadata']['CustomAttributes'];
+
+        if (is_array($customAttributes) && !empty($customAttributes)) {
+            foreach ($customAttributes as $customAttributeKey => $customAttributeValue) {
+                $userAttributes[$customAttributeValue] = isset($userInfoAttribues->$customAttributeKey)
+                    ? $userInfoAttribues->$customAttributeKey :
+                    '';
+            }
+        } else {
+            $userAttributes = [
+                'email' => $userInfoAttribues->email,
+                'employee-id' => $userInfoAttribues->{'employee-id'},
+                'document' => $userInfoAttribues->{'document'},
+                'document-type' => $userInfoAttribues->{'document-type'},
+                'name' => $userInfoAttribues->{'name'},
+                'last-name' => $userInfoAttribues->{'last-name'},
+            ];
+        }
+
         $state['Attributes'] = SimpleSAML_Utilities::parseAttributes($userAttributes);
 
         SimpleSAML_Auth_Source::completeAuth($state);
