@@ -35,7 +35,9 @@ class sspmod_go5auth_Auth_Source_LoggedUser extends SimpleSAML_Auth_Source
         $userInfo = $this->getUserInfo($accessToken);
 
         if ($userInfo->data->attributes->status != 'active') {
-            throw new SimpleSAML_Error_Exception('go5auth | error: inactive user ' . $userInfo->data->id);
+            header('HTTP/1.1 403 Forbidden');
+            echo 'go5auth | error: inactive user';
+            exit;
         }
 
         $userAttributes = [
@@ -66,7 +68,9 @@ class sspmod_go5auth_Auth_Source_LoggedUser extends SimpleSAML_Auth_Source
             return json_decode($userResponse->getBody()->getContents());
 
         } catch (HttpClientException $e) {
-            throw new SimpleSAML_Error_Exception('go5auth | error: ' . $e->getMessage());
+            header('HTTP/1.1 401 Unauthorized');
+            echo 'go5auth | error: invalid access_token';
+            exit;
         }
     }
 }
