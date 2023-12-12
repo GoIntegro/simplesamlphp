@@ -44,7 +44,7 @@ class sspmod_go5auth_Auth_Source_LoggedUser extends SimpleSAML_Auth_Source
         $userInfo = $this->getUserInfo($accessToken);
 
         if ($userInfo->data->attributes->status !== 'active' || $userInfo->data->attributes->{'login-enabled'} !== true) {
-            header('HTTP/1.1 403 Forbidden');
+            header('HTTP/1.1 401 Unauthorized');
             echo 'go5auth | error: inactive user';
             exit;
         }
