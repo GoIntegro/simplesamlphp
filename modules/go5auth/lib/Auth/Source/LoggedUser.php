@@ -27,6 +27,15 @@ class sspmod_go5auth_Auth_Source_LoggedUser extends SimpleSAML_Auth_Source
             exit;
         }
 
+        $metadataSP = $state['SPMetadata'];
+        $metadataIDP = $state['IdPMetadata'];
+
+        if (!$metadataSP['enabled'] || !$metadataIDP['enabled'] || $metadataSP['platformId'] != $metadataIDP['platformId']) {
+            header('HTTP/1.1 401 Unauthorized');
+            echo 'go5auth | error: invalid platform idp';
+            exit;
+        }
+
         $accessToken = isset($_REQUEST['access_token'])
             ? $_REQUEST['access_token']
             : trim(substr($_SERVER['HTTP_AUTHORIZATION'], 7));
@@ -42,7 +51,7 @@ class sspmod_go5auth_Auth_Source_LoggedUser extends SimpleSAML_Auth_Source
 
         $userAttributes = [];
         $userInfoAttributes = $userInfo->data->attributes;
-        $userAttributesMapping = $state['SPMetadata']['UserAttributesMapping'];
+        $userAttributesMapping = $metadataSP['UserAttributesMapping'];
 
         if (is_array($userAttributesMapping) && !empty($userAttributesMapping)) {
             foreach ($userAttributesMapping as $mappedAttributeKey => $mappedAttributeValue) {
