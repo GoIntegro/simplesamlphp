@@ -41,23 +41,23 @@ class sspmod_go5auth_Auth_Source_LoggedUser extends SimpleSAML_Auth_Source
         }
 
         $userAttributes = [];
-        $userInfoAttribues = $userInfo->data->attributes;
-        $customAttributes = $state['SPMetadata']['CustomAttributes'];
+        $userInfoAttributes = $userInfo->data->attributes;
+        $userAttributesMapping = $state['SPMetadata']['UserAttributesMapping'];
 
-        if (is_array($customAttributes) && !empty($customAttributes)) {
-            foreach ($customAttributes as $customAttributeKey => $customAttributeValue) {
-                $userAttributes[$customAttributeValue] = isset($userInfoAttribues->$customAttributeKey)
-                    ? $userInfoAttribues->$customAttributeKey :
-                    '';
+        if (is_array($userAttributesMapping) && !empty($userAttributesMapping)) {
+            foreach ($userAttributesMapping as $mappedAttributeKey => $mappedAttributeValue) {
+                $userAttributes[$mappedAttributeValue] = isset($userInfoAttributes->$mappedAttributeKey)
+                    ? $userInfoAttributes->$mappedAttributeKey
+                    : '';
             }
         } else {
             $userAttributes = [
-                'email' => $userInfoAttribues->email,
-                'employee-id' => $userInfoAttribues->{'employee-id'},
-                'document' => $userInfoAttribues->{'document'},
-                'document-type' => $userInfoAttribues->{'document-type'},
-                'name' => $userInfoAttribues->{'name'},
-                'last-name' => $userInfoAttribues->{'last-name'},
+                'email' => $userInfoAttributes->email,
+                'employee-id' => $userInfoAttributes->{'employee-id'},
+                'document' => $userInfoAttributes->{'document'},
+                'document-type' => $userInfoAttributes->{'document-type'},
+                'name' => $userInfoAttributes->{'name'},
+                'last-name' => $userInfoAttributes->{'last-name'},
             ];
         }
 
