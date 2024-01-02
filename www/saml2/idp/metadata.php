@@ -182,7 +182,8 @@ try {
 
 	} else {
 
-		header('Content-Type: application/xml');
+		header('Content-Type: application/samlmetadata+xml');
+		header('Content-Disposition: attachment; filename=' . $idpmeta->getString('host') . '-IdP.xml');
 
 		echo $metaxml;
 		exit(0);
