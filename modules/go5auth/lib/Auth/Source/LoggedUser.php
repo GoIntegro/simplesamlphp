@@ -70,6 +70,7 @@ class sspmod_go5auth_Auth_Source_LoggedUser extends SimpleSAML_Auth_Source
 
         $userAttributes = [];
         $userInfoAttributes = $userInfo->data->attributes;
+        $userInfoAttributes->role = $tokenInfo->user_role;
         $userAttributesMapping = $metadataSP['UserAttributesMapping'];
 
         if (is_array($userAttributesMapping) && !empty($userAttributesMapping)) {
@@ -86,6 +87,8 @@ class sspmod_go5auth_Auth_Source_LoggedUser extends SimpleSAML_Auth_Source
                 'document-type' => $userInfoAttributes->{'document-type'},
                 'name' => $userInfoAttributes->{'name'},
                 'last-name' => $userInfoAttributes->{'last-name'},
+                'job-title-name' => $userInfoAttributes->{'job-title-name'},
+                'role' => $userInfoAttributes->{'role'},
             ];
         }
 
