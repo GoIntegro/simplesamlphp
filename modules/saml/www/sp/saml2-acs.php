@@ -34,6 +34,12 @@ if ($idp === NULL) {
 	}
 }
 
+// IdP
+// @see: go5-authentication GoIntegro\Service\SSO\Configurator
+if ($spMetadata->getBoolean('HasEntityIdAppendedToIdp', false)) {
+	$idp .= '_' . $sourceId;
+}
+
 $session = SimpleSAML_Session::getInstance();
 $prevAuth = $session->getAuthData($sourceId, 'saml:sp:prevAuth');
 if ($prevAuth !== NULL && $prevAuth['id'] === $response->getId() && $prevAuth['issuer'] === $idp) {
