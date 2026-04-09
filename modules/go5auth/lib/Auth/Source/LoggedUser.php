@@ -107,7 +107,10 @@ class sspmod_go5auth_Auth_Source_LoggedUser extends SimpleSAML_Auth_Source
                     'client_id' => WEB_CLIENT_ID,
                     'client_secret' => WEB_CLIENT_SECRET,
                     'code' => $code,
-                ]
+                ],
+                'headers' => [
+                    'X-In-App-Browser' => 1,
+                ],
             ]);
 
             return json_decode($codeResponse->getBody()->getContents());
